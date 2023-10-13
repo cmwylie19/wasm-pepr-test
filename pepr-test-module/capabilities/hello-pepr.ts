@@ -25,7 +25,7 @@ export const HelloPepr = new Capability({
 // Use the 'When' function to create a new action, use 'Store' to persist data
 const { When, Store } = HelloPepr;
 
-async function processTemplate(a,b) {
+async function callWASM(a,b) {
   const go = new globalThis.Go();
 
   const wasmData = readFileSync("main.wasm");
@@ -54,7 +54,7 @@ When(a.Pod)
 
 
   try {
-    let label_value = await processTemplate("a","b")
+    let label_value = await callWASM("a","b")
     pod.SetLabel("pepr",label_value)
 
   } 

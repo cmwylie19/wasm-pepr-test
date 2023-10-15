@@ -14,7 +14,6 @@ func concats(this js.Value, args []js.Value) interface{} {
 
 func main() {
 	done := make(chan struct{}, 0)
-	// https://github.com/golang/go/issues/25612
 	js.Global().Set("peprWasm", js.FuncOf(concats))
 	<-done
 }

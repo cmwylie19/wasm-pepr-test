@@ -1,13 +1,6 @@
 import {
-  Capability,
-  K8s,
   Log,
-  PeprMutateRequest,
-  RegisterKind,
   a,
-  fetch,
-  fetchStatus,
-  kind,
 } from "pepr";
 import { readFileSync } from "fs";
 
@@ -29,34 +22,23 @@ async function callWASM(a,b) {
   const go = new globalThis.Go();
 
   const wasmData = readFileSync("main.wasm");
-  var result: string = undefined;
+  var concated: string;
 
   await WebAssembly.instantiate(wasmData, go.importObject).then(wasmModule => {
     go.run(wasmModule.instance);
   
-    result = global.peprWasm(a,b);
+    concated = global.peprWasm(a,b);
   });
-  return result;
+  return concated;
 }
 
-/**
- * ---------------------------------------------------------------------------------------------------
- *                                   Mutate Action (Namespace)                                   *
- * ---------------------------------------------------------------------------------------------------
- *
- * This action removes the label `remove-me` when a Namespace is created.
- * Note we don't need to specify the namespace here, because we've already specified
- * it in the Capability definition above.
- */
+
 When(a.Pod)
 .IsCreated()
 .Mutate(async pod => {
-
-
   try {
     let label_value = await callWASM("a","b")
     pod.SetLabel("pepr",label_value)
-
   } 
   catch(err) {
     Log.error(err);

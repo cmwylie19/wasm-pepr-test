@@ -1,6 +1,7 @@
 import {
   Log,
   a,
+  Capability,
 } from "pepr";
 import { readFileSync } from "fs";
 
